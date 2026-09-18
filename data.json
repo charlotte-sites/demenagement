@@ -17,37 +17,12 @@
     },
     {
       "letter": "D",
-      "name": "WC du bas",
+      "name": "Chambre du haut",
       "count": 2
     },
     {
       "letter": "E",
-      "name": "Salle d’eau du bas",
-      "count": 2
-    },
-    {
-      "letter": "F",
-      "name": "Chambre Éloi",
-      "count": 2
-    },
-    {
-      "letter": "G",
-      "name": "Bureau Céline",
-      "count": 2
-    },
-    {
-      "letter": "H",
-      "name": "Bureau Charlotte",
-      "count": 2
-    },
-    {
-      "letter": "I",
-      "name": "Mezzanine",
-      "count": 2
-    },
-    {
-      "letter": "J",
-      "name": "Salle de bain du haut",
+      "name": "Salle de bain",
       "count": 2
     }
   ],
