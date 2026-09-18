@@ -7,51 +7,24 @@
     },
     {
       "letter": "B",
-      "name": "Salon - Salle à manger",
+      "name": "Salon – Salle à manger",
       "count": 2
     },
     {
       "letter": "C",
-      "name": "Chambre nous",
+      "name": "Chambre du bas",
       "count": 2
     },
     {
       "letter": "D",
-      "name": "WC du bas",
+      "name": "Chambre du haut",
       "count": 2
     },
     {
       "letter": "E",
-      "name": "Salle de bain du bas",
-      "count": 2
-    },
-    {
-      "letter": "F",
-      "name": "Chambre Éloi",
-      "count": 2
-    },
-    {
-      "letter": "G",
-      "name": "Bureau Céline",
-      "count": 2
-    },
-    {
-      "letter": "H",
-      "name": "Bureau Charlotte",
-      "count": 2
-    },
-    {
-      "letter": "I",
-      "name": "Salle de bain du haut",
-      "count": 2
-    },
-    {
-      "letter": "J",
-      "name": "Mezzanine",
+      "name": "Salle de bain",
       "count": 2
     }
   ],
-  "notes": {
-    "A-1": "assiettes\nverres"
-  }
+  "notes": {}
 }
