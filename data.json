@@ -44,6 +44,11 @@
       "letter": "I",
       "name": "Bureau Charlotte",
       "count": 2
+    },
+    {
+      "letter": "J",
+      "name": "Mezzanine",
+      "count": 2
     }
   ],
   "notes": {}
