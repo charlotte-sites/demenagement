@@ -24,6 +24,11 @@
       "letter": "E",
       "name": "WC bas",
       "count": 2
+    },
+    {
+      "letter": "F",
+      "name": "Garage / Buanderie",
+      "count": 2
     }
   ],
   "notes": {}
