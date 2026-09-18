@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>📦 Inventaire Déménagement</title>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --surface: #fff;
+  --border: #e2e5ea;
+  --text: #1a1d23;
+  --muted: #8a919e;
+  --accent: #3b5bdb;
+  --accent-light: #eef2ff;
+  --green: #2d9d6e;
+  --green-border: #6ee7b7;
+  --orange: #e47a2e;
+  --radius: 10px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #1a1d23 0%, #22273a 100%);
+  color: #fff;
+  padding: 14px 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 16px rgba(0,0,0,.4);
+}
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.header-title { flex: 1; }
+.header h1 {
+  font-size: 18px; font-weight: 900;
+  letter-spacing: -.3px; line-height: 1.1;
+}
+.header h1 span { color: var(--orange); }
+.header-sub {
+  font-size: 11px; color: rgba(255,255,255,.38);
+  margin-top: 2px; letter-spacing: .1px;
+}
+.header-actions { display: flex; gap: 6px; align-items: center; }
+.btn-hdr {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.09);
+  color: rgba(255,255,255,.8); white-space: nowrap;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .12s;
+}
+.btn-hdr:active { background: rgba(255,255,255,.22); color: #fff; }
+
+.search-wrap { position: relative; margin-bottom: 0; }
+.search-input {
+  width: 100%;
+  padding: 10px 38px 10px 38px;
+  border: 1.5px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  color: #fff; font-size: 14px;
+  outline: none; -webkit-appearance: none;
+}
+.search-input::placeholder { color: rgba(255,255,255,.35); }
+.search-input:focus { border-color: var(--orange); background: rgba(255,255,255,.13); }
+.s-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; opacity: .4; pointer-events: none; }
+.s-clear {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  background: rgba(255,255,255,.18); border: none; color: #fff;
+  border-radius: 50%; width: 20px; height: 20px; font-size: 11px;
+  cursor: pointer; display: none; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.s-clear.show { display: flex; }
+
+/* ── SEARCH DIVIDER ── */
+.search-divider { height: 1px; background: rgba(255,255,255,.07); margin: 11px -16px 0; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 4px;
+}
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  display: flex; align-items: center; gap: 6px;
+  padding: 10px 13px;
+  border-bottom: 3px solid transparent;
+  font-size: 13px; font-weight: 600;
+  color: rgba(255,255,255,.45);
+  white-space: nowrap; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none; flex-shrink: 0;
+}
+.tab:active { color: rgba(255,255,255,.8); }
+.tab.active { color: #fff; border-bottom-color: var(--orange); }
+.tab-dot {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(255,255,255,.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 900; flex-shrink: 0;
+}
+.tab.active .tab-dot { background: var(--orange); }
+.btn-add-tab {
+  padding: 10px 13px;
+  background: none; border: none;
+  color: rgba(255,255,255,.35); font-size: 20px;
+  cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn-add-tab:active { color: rgba(255,255,255,.8); }
+
+/* ── MAIN ── */
+.main { padding: 12px 10px; max-width: 720px; margin: 0 auto; }
+
+/* Room header bar */
+.room-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,.07);
+}
+.room-badge {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; flex-shrink: 0;
+}
+.room-name { font-size: 15px; font-weight: 800; flex: 1; }
+.room-count { font-size: 12px; color: var(--muted); }
+.btn-room-edit {
+  padding: 6px 10px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 7px; font-size: 12px; cursor: pointer; color: var(--muted);
+  -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+}
+
+/* ── CARD GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 7px;
+  align-items: start;
+}
+
+/* ── BOX CARD (view mode) ── */
+.box-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  padding: 10px 9px 9px;
+  cursor: pointer;
+  min-height: 100px;
+  display: flex; flex-direction: column; gap: 4px;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .12s, box-shadow .12s;
+}
+.box-card:active { background: #f8f9fb; }
+.box-card.filled { border-color: var(--green-border); border-left: 3px solid var(--green); }
+.box-card.search-match { border-color: var(--orange); box-shadow: 0 0 0 2px rgba(228,122,46,.2); }
+.box-card.search-hide { display: none; }
+
+/* ── BOX CARD (edit mode) ── */
+.box-card.editing {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(59,91,219,.18);
+  cursor: default; min-height: unset;
+}
+.box-card.editing:active { background: var(--surface); }
+
+.card-head-row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+.box-id {
+  font-size: 12px; font-weight: 900;
+  color: var(--accent); letter-spacing: .2px; line-height: 1;
+}
+.box-card.filled .box-id { color: var(--green); }
+.box-card.editing .box-id { color: var(--accent); }
+.box-card.search-match .box-id { color: var(--orange); }
+
+.btn-card-cancel {
+  background: none; border: none;
+  color: var(--muted); font-size: 14px;
+  cursor: pointer; padding: 0 2px; line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.box-notes {
+  font-size: 11px; line-height: 1.5; color: var(--text);
+  flex: 1;
+}
+.box-notes.empty { color: var(--muted); font-style: italic; font-size: 10px; }
+.box-notes ul { padding-left: 1.1em; }
+.box-notes li { margin-bottom: 1px; }
+.box-notes p { margin-bottom: 2px; }
+
+/* Inline edit textarea */
+.inline-ta {
+  width: 100%;
+  min-height: 72px;
+  padding: 7px 8px;
+  border: 1.5px solid var(--accent);
+  border-radius: 7px;
+  font-size: 13px; font-family: inherit; line-height: 1.55;
+  resize: none; overflow: hidden;
+  outline: none; color: var(--text);
+  -webkit-appearance: none;
+}
+.inline-save {
+  width: 100%; margin-top: 2px;
+  padding: 8px;
+  background: var(--accent); color: #fff;
+  border: none; border-radius: 7px;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.inline-save:active { opacity: .82; }
+
+/* Add box button */
+.btn-add-box {
+  background: var(--surface);
+  border: 1.5px dashed var(--border);
+  border-radius: 9px;
+  min-height: 80px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--muted); font-size: 24px; font-weight: 300;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .12s, color .12s, background .12s;
+}
+.btn-add-box:active { border-color: var(--accent); color: var(--accent); background: var(--accent-light); }
+
+/* ── GÉNÉRAL TAB ── */
+.gen-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.gen-room-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 11px 9px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color .12s;
+}
+.gen-room-card:active { background: #f8f9fb; }
+.gen-room-card.has-data { border-left: 3px solid var(--green); }
+.gen-room-top {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.gen-badge {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 900; flex-shrink: 0;
+}
+.gen-room-card.has-data .gen-badge { background: var(--green); }
+.gen-info { flex: 1; min-width: 0; overflow: hidden; }
+.gen-room-name {
+  font-size: 12px; font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.gen-room-sub { font-size: 10px; color: var(--muted); margin-top: 1px; }
+.gen-count { text-align: right; flex-shrink: 0; }
+.gen-count-num {
+  font-size: 20px; font-weight: 900; line-height: 1;
+  color: var(--accent);
+}
+.gen-room-card.has-data .gen-count-num { color: var(--green); }
+.gen-count-denom { font-size: 11px; color: var(--muted); font-weight: 600; }
+.gen-progress-row {
+  display: flex; align-items: center; gap: 7px;
+}
+.gen-progress {
+  flex: 1; height: 5px; background: var(--border);
+  border-radius: 3px; overflow: hidden;
+}
+.gen-progress-bar {
+  height: 100%; background: var(--green);
+  border-radius: 3px; transition: width .4s;
+}
+.gen-pct {
+  font-size: 11px; font-weight: 700; color: var(--muted);
+  min-width: 28px; text-align: right;
+}
+
+/* Search / empty */
+.search-info { font-size: 12px; color: var(--muted); margin-bottom: 8px; display: none; }
+.search-info.show { display: block; }
+.empty-msg { text-align: center; padding: 40px 20px; color: var(--muted); display: none; }
+.empty-msg.show { display: block; }
+
+/* ── CONFIG MODAL ── */
+.cfg-status {
+  margin: 0 18px 14px;
+  padding: 10px 13px;
+  border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  display: none;
+}
+.cfg-status.ok { background: #ecfdf5; color: #166534; display: block; }
+.cfg-status.error { background: #fee2e2; color: #dc2626; display: block; }
+.btn-test {
+  width: 100%; padding: 11px;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 10px; font-size: 14px; cursor: pointer; color: var(--text);
+  -webkit-tap-highlight-color: transparent; margin-bottom: 0;
+}
+.btn-test:active { background: var(--border); }
+
+/* ── ROOM MODAL (bottom sheet) ── */
+.room-modal-bg {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.5); z-index: 500;
+  align-items: flex-end; justify-content: center;
+}
+.room-modal-bg.open { display: flex; }
+.room-modal {
+  background: var(--surface);
+  border-radius: 16px 16px 0 0;
+  padding: 0 0 44px;
+  width: 100%; max-width: 540px;
+  animation: slideUp .22s ease;
+}
+@keyframes slideUp { from { transform: translateY(60px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-handle { width: 38px; height: 4px; background: var(--border); border-radius: 4px; margin: 12px auto 16px; }
+.room-modal h3 { font-size: 17px; font-weight: 800; padding: 0 18px 14px; }
+.field { padding: 0 18px 14px; }
+.field label { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .4px; display: block; margin-bottom: 6px; }
+.field input {
+  width: 100%; padding: 12px 14px;
+  border: 1.5px solid var(--border); border-radius: 10px;
+  font-size: 16px; outline: none; -webkit-appearance: none;
+}
+.field input:focus { border-color: var(--accent); }
+.room-modal-actions { display: flex; gap: 8px; padding: 0 18px; }
+.rm-save {
+  flex: 1; padding: 13px; background: var(--accent); color: #fff;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.rm-cancel {
+  padding: 13px 16px; background: var(--bg);
+  border: 1px solid var(--border); border-radius: 10px;
+  font-size: 15px; cursor: pointer; color: var(--muted);
+  -webkit-tap-highlight-color: transparent;
+}
+.rm-delete {
+  width: calc(100% - 36px); margin: 12px 18px 0; padding: 13px;
+  background: #fee2e2; border: 1px solid #fca5a5; border-radius: 10px;
+  font-size: 15px; font-weight: 600; cursor: pointer; color: #dc2626;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (min-width: 500px) {
+  .room-modal-bg { align-items: center; padding: 20px; }
+  .room-modal { border-radius: 16px; }
+  .modal-handle { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-top">
+    <div class="header-title">
+      <h1>📦 Cartons <span>Déménagement</span></h1>
+      <div class="header-sub" id="header-sub">Chargement…</div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-hdr" onclick="exportData()" title="Exporter JSON">⬇</button>
+      <label class="btn-hdr" style="cursor:pointer;" title="Importer JSON">⬆<input type="file" accept=".json" style="display:none" onchange="importData(this)"></label>
+      <button class="btn-hdr" onclick="openConfig()" title="Synchronisation GitHub">⚙</button>
+    </div>
+  </div>
+  <div class="search-wrap">
+    <span class="s-icon">🔍</span>
+    <input type="text" class="search-input" id="s-input" placeholder="Rechercher dans tous les cartons…" oninput="onSearch(this.value)">
+    <button class="s-clear" id="s-clear" onclick="clearSearch()">✕</button>
+  </div>
+  <div class="search-divider"></div>
+  <div class="tabs" id="tabs">
+    <button class="btn-add-tab" onclick="openAddRoom()" title="Ajouter une pièce">＋</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="main-content">
+  <div class="search-info" id="search-info"></div>
+  <div id="view"></div>
+  <div class="empty-msg" id="empty-msg">Aucun carton ne contient ce mot-clé.</div>
+</div>
+
+<!-- CONFIG MODAL -->
+<div class="room-modal-bg" id="cfg-modal-bg" onclick="if(event.target===this)closeCfgModal()">
+  <div class="room-modal">
+    <div class="modal-handle"></div>
+    <h3>⚙ Synchronisation GitHub</h3>
+    <div class="cfg-status" id="cfg-status"></div>
+    <div class="field">
+      <label>Token GitHub (PAT)</label>
+      <input type="password" id="cfg-token" placeholder="ghp_xxxxxxxxxxxx" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Dépôt (propriétaire/nom)</label>
+      <input type="text" id="cfg-repo" placeholder="charlotte/demenagement" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Branche</label>
+      <input type="text" id="cfg-branch" placeholder="main" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Fichier de données</label>
+      <input type="text" id="cfg-file" placeholder="data.json" autocomplete="off">
+    </div>
+    <div style="padding:0 18px 14px">
+      <button class="btn-test" onclick="testGhConnection()">Tester la connexion</button>
+    </div>
+    <div class="room-modal-actions">
+      <button class="rm-cancel" onclick="closeCfgModal()">Annuler</button>
+      <button class="rm-save" onclick="saveCfg()">Enregistrer</button>
+    </div>
+    <button class="rm-delete" id="cfg-delete" style="display:none" onclick="deleteCfg()">🗑 Supprimer la configuration</button>
+  </div>
+</div>
+
+<!-- ROOM MODAL -->
+<div class="room-modal-bg" id="room-modal-bg" onclick="if(event.target===this)closeRoomModal()">
+  <div class="room-modal">
+    <div class="modal-handle"></div>
+    <h3 id="room-modal-title">Ajouter une pièce</h3>
+    <div class="field">
+      <label>Lettre</label>
+      <input type="text" id="rm-letter" maxlength="2" placeholder="A" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Nom de la pièce</label>
+      <input type="text" id="rm-name" placeholder="Cuisine" autocomplete="off" onkeydown="if(event.key==='Enter')saveRoom()">
+    </div>
+    <div class="room-modal-actions">
+      <button class="rm-cancel" onclick="closeRoomModal()">Annuler</button>
+      <button class="rm-save" onclick="saveRoom()">Enregistrer</button>
+    </div>
+    <button class="rm-delete" id="rm-delete" style="display:none" onclick="deleteRoom()">🗑 Supprimer cette pièce</button>
+  </div>
+</div>
+
+<script>
+const SK = 'demenagement_v1';
+const CFG_KEY = 'gh_cfg';
+const DEFAULT_COUNT = 2;
+let ghSha = null;
+
+const DEFAULTS = [
+  { letter:'A', name:'Cuisine', count: DEFAULT_COUNT },
+  { letter:'B', name:'Salon – Salle à manger', count: DEFAULT_COUNT },
+  { letter:'C', name:'Chambre du bas', count: DEFAULT_COUNT },
+  { letter:'D', name:'Chambre du haut', count: DEFAULT_COUNT },
+  { letter:'E', name:'Salle de bain', count: DEFAULT_COUNT },
+];
+
+let data = { rooms:[], notes:{} };
+let activeTab = '__general__';
+let editingRoom = null;
+let editingCard = null;
+let searchTerm = '';
+
+// ── Storage ───────────────────────────────────────────────────────────────────
+function load() {
+  try {
+    const raw = localStorage.getItem(SK);
+    if (raw) {
+      data = JSON.parse(raw);
+      data.rooms.forEach(r => {
+        const oldCount = r.count || 20;
+        let maxWithData = 0;
+        for (let i = oldCount; i >= 1; i--) {
+          if (data.notes[`${r.letter}-${i}`]?.trim()) { maxWithData = i; break; }
+        }
+        r.count = Math.max(DEFAULT_COUNT, maxWithData);
+      });
+    } else {
+      data = { rooms: DEFAULTS.map(r => ({...r})), notes: {} };
+    }
+  } catch(e) { data = { rooms: DEFAULTS.map(r => ({...r})), notes: {} }; }
+}
+function save() {
+  localStorage.setItem(SK, JSON.stringify(data));
+  syncToGitHub();
+}
+function getNotes(id) { return data.notes[id] || ''; }
+function getRoomCount(letter) {
+  const r = data.rooms.find(r => r.letter === letter);
+  return r ? (r.count || DEFAULT_COUNT) : DEFAULT_COUNT;
+}
+
+// ── Render helpers ────────────────────────────────────────────────────────────
+function esc(s) {
+  return String(s)
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function hl(text, term) {
+  if (!term) return esc(text);
+  return esc(text).replace(
+    new RegExp('('+term.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi'),
+    '<mark style="background:#fde68a;border-radius:2px">$1</mark>'
+  );
+}
+function renderNotes(text, term) {
+  if (!text || !text.trim()) return '';
+  const lines = text.split('\n');
+  let html = '', inList = false;
+  for (const raw of lines) {
+    const line = raw.trimEnd();
+    const isBullet = /^[•\-\*]\s/.test(line);
+    const content = isBullet ? line.replace(/^[•\-\*]\s*/,'') : line;
+    const out = hl(content, term);
+    if (isBullet) {
+      if (!inList) { html += '<ul>'; inList = true; }
+      html += `<li>${out}</li>`;
+    } else {
+      if (inList) { html += '</ul>'; inList = false; }
+      if (line.trim()) html += `<p>${out}</p>`;
+    }
+  }
+  if (inList) html += '</ul>';
+  return html;
+}
+function countFilled(letter) {
+  let n = 0;
+  const count = getRoomCount(letter);
+  for (let i = 1; i <= count; i++) if (getNotes(`${letter}-${i}`).trim()) n++;
+  return n;
+}
+
+// ── Build card ────────────────────────────────────────────────────────────────
+function buildCard(boxId, term) {
+  if (editingCard === boxId) {
+    const val = getNotes(boxId);
+    return `<div class="box-card editing" id="card-${esc(boxId)}">
+      <div class="card-head-row">
+        <div class="box-id">${esc(boxId)}</div>
+        <button class="btn-card-cancel" onclick="cancelInlineEdit('${esc(boxId)}')" title="Annuler">✕</button>
+      </div>
+      <textarea class="inline-ta" id="ta-${esc(boxId)}"
+        placeholder="• Assiettes&#10;• Verres&#10;• Fragile !"
+        oninput="autoResize(this)"
+        onkeydown="inlineKey(event,'${esc(boxId)}')">${esc(val)}</textarea>
+      <button class="inline-save" onclick="saveInline('${esc(boxId)}')">✓ Sauvegarder</button>
+    </div>`;
+  }
+  const notes = getNotes(boxId);
+  const filled = notes.trim().length > 0;
+  const notesHTML = filled ? renderNotes(notes, term) : '';
+  const matches = term && notes.toLowerCase().includes(term.toLowerCase());
+  const hidden = term && !matches;
+  let cls = 'box-card';
+  if (filled) cls += ' filled';
+  if (matches) cls += ' search-match';
+  if (hidden) cls += ' search-hide';
+  return `<div class="${cls}" id="card-${esc(boxId)}" onclick="startInlineEdit('${esc(boxId)}')">
+    <div class="box-id">${esc(boxId)}</div>
+    <div class="box-notes${filled ? '' : ' empty'}">${filled ? notesHTML : '···'}</div>
+  </div>`;
+}
+
+// ── Inline edit ───────────────────────────────────────────────────────────────
+function autoResize(ta) {
+  ta.style.height = 'auto';
+  ta.style.height = ta.scrollHeight + 'px';
+}
+function startInlineEdit(boxId) {
+  editingCard = boxId;
+  render();
+  setTimeout(() => {
+    const ta = document.getElementById(`ta-${boxId}`);
+    if (ta) {
+      autoResize(ta);
+      ta.focus();
+      ta.setSelectionRange(ta.value.length, ta.value.length);
+      const card = document.getElementById(`card-${boxId}`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 50);
+}
+function saveInline(boxId) {
+  const ta = document.getElementById(`ta-${boxId}`);
+  if (!ta) return;
+  data.notes[boxId] = ta.value;
+  save();
+  editingCard = null;
+  render();
+}
+function cancelInlineEdit() {
+  editingCard = null;
+  render();
+}
+function inlineKey(e, boxId) {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); saveInline(boxId); return; }
+  if (e.key === 'Enter') {
+    const ta = e.target;
+    const pos = ta.selectionStart;
+    const lineStart = ta.value.lastIndexOf('\n', pos - 1) + 1;
+    const lineText = ta.value.slice(lineStart, pos);
+    if (/^[•\-\*]\s/.test(lineText)) {
+      e.preventDefault();
+      const bullet = lineText.match(/^([•\-\*]\s)/)[1];
+      ta.value = ta.value.slice(0, pos) + '\n' + bullet + ta.value.slice(ta.selectionEnd);
+      ta.selectionStart = ta.selectionEnd = pos + 1 + bullet.length;
+      autoResize(ta);
+    }
+  }
+}
+
+// ── Add box ───────────────────────────────────────────────────────────────────
+function addBox(letter) {
+  const room = data.rooms.find(r => r.letter === letter);
+  if (!room) return;
+  if (!room.count) room.count = DEFAULT_COUNT;
+  room.count++;
+  save();
+  const newId = `${letter}-${room.count}`;
+  editingCard = newId;
+  render();
+  setTimeout(() => {
+    const ta = document.getElementById(`ta-${newId}`);
+    if (ta) {
+      ta.focus();
+      const card = document.getElementById(`card-${newId}`);
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  }, 60);
+}
+
+// ── GENERAL VIEW ──────────────────────────────────────────────────────────────
+function renderGeneral() {
+  if (!data.rooms.length) {
+    return `<div class="empty-msg show">Aucune pièce — cliquez sur ＋ pour commencer.</div>`;
+  }
+  const cards = data.rooms.map(room => {
+    const count = getRoomCount(room.letter);
+    const filled = countFilled(room.letter);
+    const pct = count > 0 ? Math.round(filled / count * 100) : 0;
+    const hasData = filled > 0;
+    const subLabel = count === 0
+      ? 'Aucun carton'
+      : filled === count
+        ? `Tout renseigné ✓`
+        : `${count - filled} vide${count - filled > 1 ? 's' : ''} / ${count}`;
+    return `<div class="gen-room-card${hasData ? ' has-data' : ''}" onclick="goRoom('${esc(room.letter)}')">
+      <div class="gen-room-top">
+        <div class="gen-badge">${esc(room.letter)}</div>
+        <div class="gen-info">
+          <div class="gen-room-name">${esc(room.name)}</div>
+          <div class="gen-room-sub">${subLabel}</div>
+        </div>
+        <div class="gen-count">
+          <div class="gen-count-num">${filled}</div>
+          <div class="gen-count-denom">/ ${count}</div>
+        </div>
+      </div>
+      <div class="gen-progress-row">
+        <div class="gen-progress"><div class="gen-progress-bar" style="width:${pct}%"></div></div>
+        <div class="gen-pct">${pct}%</div>
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="gen-grid">${cards}</div>`;
+}
+
+function goRoom(letter) {
+  activeTab = letter;
+  render();
+  setTimeout(() => {
+    const tab = document.querySelector(`.tab[data-letter="${letter}"]`);
+    if (tab) tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }, 50);
+}
+
+// ── ROOM VIEW ─────────────────────────────────────────────────────────────────
+function renderRoom(letter) {
+  const room = data.rooms.find(r => r.letter === letter);
+  if (!room) return '';
+  const count = getRoomCount(letter);
+  const filled = countFilled(letter);
+  const cards = Array.from({length: count}, (_, i) => buildCard(`${letter}-${i+1}`, searchTerm)).join('');
+  return `<div class="room-bar">
+    <div class="room-badge">${esc(room.letter)}</div>
+    <div>
+      <div class="room-name">${esc(room.name)}</div>
+      <div class="room-count">${filled}/${count} cartons renseignés</div>
+    </div>
+    <button class="btn-room-edit" onclick="openEditRoom('${esc(room.letter)}')">✏ Modifier</button>
+  </div>
+  <div class="card-grid">
+    ${cards}
+    <div class="btn-add-box" onclick="addBox('${esc(letter)}')" title="Ajouter un carton">＋</div>
+  </div>`;
+}
+
+// ── SEARCH VIEW ───────────────────────────────────────────────────────────────
+function renderSearch(term) {
+  const matches = [];
+  data.rooms.forEach(room => {
+    const count = getRoomCount(room.letter);
+    for (let i = 1; i <= count; i++) {
+      const id = `${room.letter}-${i}`;
+      if (getNotes(id).toLowerCase().includes(term.toLowerCase())) matches.push(id);
+    }
+  });
+  const info = document.getElementById('search-info');
+  const empty = document.getElementById('empty-msg');
+  if (!matches.length) {
+    info.className = 'search-info';
+    empty.className = 'empty-msg show';
+    return '';
+  }
+  info.className = 'search-info show';
+  info.innerHTML = `<strong>${matches.length}</strong> carton${matches.length > 1 ? 's' : ''} trouvé${matches.length > 1 ? 's' : ''} pour <strong>« ${esc(term)} »</strong>`;
+  empty.className = 'empty-msg';
+  return `<div class="card-grid">${matches.map(id => buildCard(id, term)).join('')}</div>`;
+}
+
+// ── TABS ──────────────────────────────────────────────────────────────────────
+function renderTabs() {
+  const bar = document.getElementById('tabs');
+  const addBtn = bar.querySelector('.btn-add-tab');
+  bar.querySelectorAll('.tab').forEach(t => t.remove());
+
+  const genTab = document.createElement('div');
+  genTab.className = 'tab' + (activeTab === '__general__' ? ' active' : '');
+  genTab.innerHTML = `<span class="tab-dot">🏠</span>Général`;
+  genTab.onclick = () => {
+    activeTab = '__general__'; searchTerm = ''; editingCard = null;
+    document.getElementById('s-input').value = '';
+    document.getElementById('s-clear').classList.remove('show');
+    render();
+  };
+  bar.insertBefore(genTab, addBtn);
+
+  data.rooms.forEach(room => {
+    const tab = document.createElement('div');
+    tab.className = 'tab' + (activeTab === room.letter ? ' active' : '');
+    tab.dataset.letter = room.letter;
+    tab.innerHTML = `<span class="tab-dot">${esc(room.letter)}</span>${esc(room.name)}`;
+    tab.onclick = () => {
+      activeTab = room.letter; searchTerm = ''; editingCard = null;
+      document.getElementById('s-input').value = '';
+      document.getElementById('s-clear').classList.remove('show');
+      render();
+    };
+    bar.insertBefore(tab, addBtn);
+  });
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────────────────────
+function render() {
+  renderTabs();
+  const view = document.getElementById('view');
+  const info = document.getElementById('search-info');
+  const empty = document.getElementById('empty-msg');
+  info.className = 'search-info';
+  empty.className = 'empty-msg';
+
+  if (searchTerm) { view.innerHTML = renderSearch(searchTerm); return; }
+  if (activeTab === '__general__') { view.innerHTML = renderGeneral(); return; }
+  view.innerHTML = renderRoom(activeTab);
+}
+
+// ── ROOM MODAL ────────────────────────────────────────────────────────────────
+function nextLetter() {
+  const used = new Set(data.rooms.map(r => r.letter));
+  for (let i = 0; i < 26; i++) {
+    const l = String.fromCharCode(65 + i);
+    if (!used.has(l)) return l;
+  }
+  return '';
+}
+function openAddRoom() {
+  editingRoom = null;
+  document.getElementById('room-modal-title').textContent = 'Ajouter une pièce';
+  document.getElementById('rm-letter').value = nextLetter();
+  document.getElementById('rm-name').value = '';
+  document.getElementById('rm-delete').style.display = 'none';
+  document.getElementById('room-modal-bg').classList.add('open');
+  setTimeout(() => document.getElementById('rm-name').focus(), 80);
+}
+function openEditRoom(letter) {
+  editingRoom = letter;
+  const room = data.rooms.find(r => r.letter === letter);
+  if (!room) return;
+  document.getElementById('room-modal-title').textContent = 'Modifier la pièce';
+  document.getElementById('rm-letter').value = room.letter;
+  document.getElementById('rm-name').value = room.name;
+  document.getElementById('rm-delete').style.display = '';
+  document.getElementById('room-modal-bg').classList.add('open');
+  setTimeout(() => document.getElementById('rm-name').focus(), 80);
+}
+function saveRoom() {
+  const letter = document.getElementById('rm-letter').value.trim().toUpperCase();
+  const name = document.getElementById('rm-name').value.trim();
+  if (!letter || !name) { alert('Remplissez la lettre et le nom.'); return; }
+  if (editingRoom) {
+    const idx = data.rooms.findIndex(r => r.letter === editingRoom);
+    if (letter !== editingRoom) {
+      if (data.rooms.find(r => r.letter === letter)) { alert(`La lettre ${letter} est déjà utilisée.`); return; }
+      const count = getRoomCount(editingRoom);
+      for (let i = 1; i <= count; i++) {
+        const o = `${editingRoom}-${i}`, n = `${letter}-${i}`;
+        if (data.notes[o]) { data.notes[n] = data.notes[o]; delete data.notes[o]; }
+      }
+      if (activeTab === editingRoom) activeTab = letter;
+      if (editingCard && editingCard.startsWith(`${editingRoom}-`)) {
+        editingCard = `${letter}-${editingCard.split('-')[1]}`;
+      }
+    }
+    data.rooms[idx] = { letter, name, count: data.rooms[idx].count || DEFAULT_COUNT };
+  } else {
+    if (data.rooms.find(r => r.letter === letter)) { alert(`La lettre ${letter} est déjà utilisée.`); return; }
+    data.rooms.push({ letter, name, count: DEFAULT_COUNT });
+    data.rooms.sort((a, b) => a.letter.localeCompare(b.letter));
+    activeTab = letter;
+  }
+  save(); closeRoomModal(); render();
+}
+function deleteRoom() {
+  const room = data.rooms.find(r => r.letter === editingRoom);
+  if (!room) return;
+  const count = getRoomCount(editingRoom);
+  const hasData = Array.from({length: count}, (_, i) => getNotes(`${editingRoom}-${i+1}`)).some(n => n.trim());
+  if (!confirm(hasData
+    ? `Supprimer "${room.name}" et tous ses cartons ? Irréversible.`
+    : `Supprimer "${room.name}" ?`)) return;
+  for (let i = 1; i <= count; i++) delete data.notes[`${editingRoom}-${i}`];
+  data.rooms = data.rooms.filter(r => r.letter !== editingRoom);
+  if (activeTab === editingRoom) activeTab = '__general__';
+  if (editingCard && editingCard.startsWith(`${editingRoom}-`)) editingCard = null;
+  save(); closeRoomModal(); render();
+}
+function closeRoomModal() {
+  document.getElementById('room-modal-bg').classList.remove('open');
+  editingRoom = null;
+}
+
+// ── SEARCH ────────────────────────────────────────────────────────────────────
+function onSearch(val) {
+  searchTerm = val; editingCard = null;
+  document.getElementById('s-clear').classList.toggle('show', val.length > 0);
+  render();
+}
+function clearSearch() {
+  searchTerm = ''; editingCard = null;
+  document.getElementById('s-input').value = '';
+  document.getElementById('s-clear').classList.remove('show');
+  render();
+}
+
+// ── GITHUB SYNC ───────────────────────────────────────────────────────────────
+function getGhCfg() {
+  try { return JSON.parse(localStorage.getItem(CFG_KEY)); } catch(e) { return null; }
+}
+function setSyncUI(status, msg) {
+  const el = document.getElementById('header-sub');
+  if (!el) return;
+  const icons = { ok: '🟢', syncing: '🟡', error: '🔴', none: '⚫' };
+  el.textContent = `${icons[status] || '⚫'} ${msg}`;
+}
+async function loadFromGitHub() {
+  const cfg = getGhCfg();
+  if (!cfg?.token || !cfg?.repo) {
+    setSyncUI('none', 'Données locales · configurer sync ⚙');
+    return false;
+  }
+  setSyncUI('syncing', 'Connexion à GitHub…');
+  try {
+    const [owner, repo] = cfg.repo.split('/');
+    const file = cfg.file || 'data.json';
+    const branch = cfg.branch || 'main';
+    const url = `https://api.github.com/repos/${owner}/${repo}/contents/${file}?ref=${branch}`;
+    const r = await fetch(url, { headers: { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json' } });
+    if (r.status === 404) { setSyncUI('ok', 'GitHub connecté · première utilisation'); return false; }
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const d = await r.json();
+    ghSha = d.sha;
+    const text = decodeURIComponent(escape(atob(d.content.replace(/\n/g, ''))));
+    const parsed = JSON.parse(text);
+    parsed.rooms?.forEach(r => { if (!r.count) r.count = DEFAULT_COUNT; });
+    data = parsed;
+    localStorage.setItem(SK, JSON.stringify(data));
+    setSyncUI('ok', `Synchronisé · ${new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})}`);
+    return true;
+  } catch(e) {
+    setSyncUI('error', `Erreur GitHub · données locales utilisées`);
+    return false;
+  }
+}
+async function syncToGitHub() {
+  const cfg = getGhCfg();
+  if (!cfg?.token || !cfg?.repo) return;
+  setSyncUI('syncing', 'Sauvegarde…');
+  try {
+    const [owner, repo] = cfg.repo.split('/');
+    const file = cfg.file || 'data.json';
+    const branch = cfg.branch || 'main';
+    const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${file}`;
+    const headers = { 'Authorization': `token ${cfg.token}`, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' };
+    if (!ghSha) {
+      const gr = await fetch(apiUrl + `?ref=${branch}`, { headers });
+      if (gr.ok) { const gd = await gr.json(); ghSha = gd.sha; }
+    }
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const body = { message: `cartons: ${new Date().toISOString().slice(0,16).replace('T',' ')}`, content, branch };
+    if (ghSha) body.sha = ghSha;
+    const pr = await fetch(apiUrl, { method: 'PUT', headers, body: JSON.stringify(body) });
+    if (!pr.ok) { const e = await pr.json().catch(() => ({})); throw new Error(e?.message || `HTTP ${pr.status}`); }
+    const pd = await pr.json();
+    ghSha = pd.content.sha;
+    setSyncUI('ok', `Sauvegardé · ${new Date().toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'})}`);
+  } catch(e) {
+    setSyncUI('error', `Échec sync · ${String(e.message).slice(0, 40)}`);
+  }
+}
+
+// ── CONFIG MODAL ──────────────────────────────────────────────────────────────
+function openConfig() {
+  const cfg = getGhCfg() || {};
+  document.getElementById('cfg-token').value = cfg.token || '';
+  document.getElementById('cfg-repo').value = cfg.repo || '';
+  document.getElementById('cfg-branch').value = cfg.branch || 'main';
+  document.getElementById('cfg-file').value = cfg.file || 'data.json';
+  document.getElementById('cfg-status').className = 'cfg-status';
+  document.getElementById('cfg-delete').style.display = cfg.token ? '' : 'none';
+  document.getElementById('cfg-modal-bg').classList.add('open');
+}
+function closeCfgModal() { document.getElementById('cfg-modal-bg').classList.remove('open'); }
+function saveCfg() {
+  const token = document.getElementById('cfg-token').value.trim();
+  const repo = document.getElementById('cfg-repo').value.trim();
+  const branch = document.getElementById('cfg-branch').value.trim() || 'main';
+  const file = document.getElementById('cfg-file').value.trim() || 'data.json';
+  if (!token || !repo) { alert('Token et dépôt requis.'); return; }
+  if (!repo.includes('/')) { alert('Format dépôt : propriétaire/nom (ex: charlotte/demenagement)'); return; }
+  localStorage.setItem(CFG_KEY, JSON.stringify({ token, repo, branch, file }));
+  ghSha = null;
+  closeCfgModal();
+  syncToGitHub();
+}
+function deleteCfg() {
+  if (!confirm('Supprimer la configuration GitHub ?')) return;
+  localStorage.removeItem(CFG_KEY);
+  ghSha = null;
+  closeCfgModal();
+  setSyncUI('none', 'Données locales · configurer sync ⚙');
+}
+async function testGhConnection() {
+  const token = document.getElementById('cfg-token').value.trim();
+  const repo = document.getElementById('cfg-repo').value.trim();
+  const statusEl = document.getElementById('cfg-status');
+  if (!token || !repo) { alert('Remplissez le token et le dépôt d\'abord.'); return; }
+  if (!repo.includes('/')) { alert('Format dépôt : propriétaire/nom'); return; }
+  const [owner, repoName] = repo.split('/');
+  statusEl.className = 'cfg-status';
+  statusEl.textContent = 'Test en cours…';
+  statusEl.style.display = 'block';
+  try {
+    const r = await fetch(`https://api.github.com/repos/${owner}/${repoName}`, {
+      headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (r.ok) {
+      const d = await r.json();
+      statusEl.className = 'cfg-status ok';
+      statusEl.textContent = `✅ Connexion réussie — dépôt "${d.full_name}" trouvé`;
+    } else {
+      const e = await r.json().catch(() => ({}));
+      statusEl.className = 'cfg-status error';
+      statusEl.textContent = `❌ Erreur ${r.status} : ${e.message || 'token ou dépôt invalide'}`;
+    }
+  } catch(e) {
+    statusEl.className = 'cfg-status error';
+    statusEl.textContent = `❌ Erreur réseau : ${e.message}`;
+  }
+}
+
+// ── EXPORT / IMPORT ───────────────────────────────────────────────────────────
+function exportData() {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `cartons_${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+function importData(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const d = JSON.parse(e.target.result);
+      if (!d.rooms || !d.notes) throw new Error('Format invalide');
+      if (!confirm(`Importer ${d.rooms.length} pièce(s) ? Les données actuelles seront remplacées.`)) return;
+      data = d;
+      data.rooms.forEach(r => { if (!r.count) r.count = DEFAULT_COUNT; });
+      activeTab = '__general__'; editingCard = null;
+      save(); render();
+    } catch(err) { alert('Erreur : ' + err.message); }
+  };
+  reader.readAsText(file); input.value = '';
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+async function init() {
+  load();   // localStorage d'abord (instantané)
+  render(); // afficher immédiatement
+  const fromGh = await loadFromGitHub(); // puis GitHub
+  if (fromGh) render(); // mettre à jour si GitHub avait des données plus récentes
+}
+init();
+</script>
+</body>
+</html>
