@@ -29,6 +29,11 @@
       "letter": "F",
       "name": "Garage / Buanderie",
       "count": 2
+    },
+    {
+      "letter": "G",
+      "name": "Chambre Éloi",
+      "count": 2
     }
   ],
   "notes": {}
