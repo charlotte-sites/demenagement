@@ -34,6 +34,11 @@
       "letter": "G",
       "name": "Chambre Éloi",
       "count": 2
+    },
+    {
+      "letter": "H",
+      "name": "Bureau Céline",
+      "count": 2
     }
   ],
   "notes": {}
