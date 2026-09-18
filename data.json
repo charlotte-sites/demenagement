@@ -1,0 +1,55 @@
+{
+  "rooms": [
+    {
+      "letter": "A",
+      "name": "Cuisine",
+      "count": 2
+    },
+    {
+      "letter": "B",
+      "name": "Salon – Salle à manger",
+      "count": 2
+    },
+    {
+      "letter": "C",
+      "name": "Chambre du bas",
+      "count": 2
+    },
+    {
+      "letter": "D",
+      "name": "WC du bas",
+      "count": 2
+    },
+    {
+      "letter": "E",
+      "name": "Salle d’eau du bas",
+      "count": 2
+    },
+    {
+      "letter": "F",
+      "name": "Chambre Éloi",
+      "count": 2
+    },
+    {
+      "letter": "G",
+      "name": "Bureau Céline",
+      "count": 2
+    },
+    {
+      "letter": "H",
+      "name": "Bureau Charlotte",
+      "count": 2
+    },
+    {
+      "letter": "I",
+      "name": "Mezzanine",
+      "count": 2
+    },
+    {
+      "letter": "J",
+      "name": "Salle de bain du haut",
+      "count": 2
+    }
+  ],
+  "notes": {}
+}
